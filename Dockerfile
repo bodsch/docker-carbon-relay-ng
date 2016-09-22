@@ -5,6 +5,8 @@ MAINTAINER Bodo Schulz <bodo@boone-schulz.de>
 LABEL version="1.0.0"
 
 EXPOSE 2003
+EXPOSE 2004
+EXPOSE 8081
 
 ENV GOPATH=/opt/go
 ENV GO15VENDOREXPERIMENT=0
