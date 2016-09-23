@@ -2,7 +2,7 @@ FROM bodsch/docker-alpine-base:1609-01
 
 MAINTAINER Bodo Schulz <bodo@boone-schulz.de>
 
-LABEL version="1.0.0"
+LABEL version="1.0.1"
 
 EXPOSE 2003
 EXPOSE 2004
@@ -26,6 +26,8 @@ RUN \
   cd "${GOPATH}/src/github.com/graphite-ng/carbon-relay-ng" && \
   make && \
   mv carbon-relay-ng /usr/bin && \
+  mkdir -p /var/spool/carbon-relay-ng && \
+  chown nobody: /var/spool/carbon-relay-ng && \
   apk del --purge \
     build-base \
     go \
