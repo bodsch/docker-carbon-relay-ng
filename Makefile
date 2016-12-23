@@ -1,35 +1,47 @@
-TYPE := carbon-relay-ng
-IMAGE_NAME := docker-${TYPE}
+
+CONTAINER  := carbon-relay-ng
+IMAGE_NAME := docker-carbon-relay-ng
+
 
 build:
-	docker build --rm --tag=$(IMAGE_NAME) .
+	docker \
+		build \
+		--rm --tag=$(IMAGE_NAME) .
+	@echo Image tag: ${IMAGE_NAME}
 
 run:
-	docker run \
+	docker \
+		run \
 		--detach \
 		--interactive \
 		--tty \
-		--hostname=${TYPE} \
-		--name=${TYPE} \
+		--hostname=${CONTAINER} \
+		--name=${CONTAINER} \
 		$(IMAGE_NAME)
 
 shell:
-	docker run \
+	docker \
+		run \
 		--rm \
 		--interactive \
 		--tty \
-		--hostname=${TYPE} \
-		--name=${TYPE} \
+		--hostname=${CONTAINER} \
+		--name=${CONTAINER} \
 		$(IMAGE_NAME) \
-		/bin/sh
+		/bin/bash
 
 exec:
 	docker exec \
 		--interactive \
 		--tty \
-		${TYPE} \
-		/bin/sh
+		${CONTAINER} \
+		/bin/bash
 
 stop:
-	docker kill \
-		${TYPE}
+	docker \
+		kill ${CONTAINER}
+
+history:
+	docker \
+		history ${IMAGE_NAME}
+
