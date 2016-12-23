@@ -1,9 +1,9 @@
 
-FROM bodsch/docker-alpine-base:1610-01
+FROM bodsch/docker-alpine-base:1612-01
 
 MAINTAINER Bodo Schulz <bodo@boone-schulz.de>
 
-LABEL version="1.1.0"
+LABEL version="1.1.1"
 
 EXPOSE 2003
 EXPOSE 2004
@@ -23,7 +23,7 @@ RUN \
     git \
     mercurial && \
   export PATH="${PATH}:${GOPATH}/bin" && \
-  go get -d github.com/graphite-ng/carbon-relay-ng && \
+  go get -d github.com/graphite-ng/carbon-relay-ng || true && \
   go get github.com/jteeuwen/go-bindata/... && \
   cd ${GOPATH}/src/github.com/graphite-ng/carbon-relay-ng && \
   make && \
