@@ -1,16 +1,17 @@
 
-FROM bodsch/docker-alpine-base:1612-01
+FROM bodsch/docker-alpine-base:1701-02
 
 MAINTAINER Bodo Schulz <bodo@boone-schulz.de>
 
-LABEL version="1.1.1"
+LABEL version="1.2.0"
 
 EXPOSE 2003
 EXPOSE 2004
 EXPOSE 8081
 
-ENV GOPATH=/opt/go
-ENV GO15VENDOREXPERIMENT=0
+ENV \
+  GOPATH=/opt/go \
+  GO15VENDOREXPERIMENT=0
 
 # ---------------------------------------------------------------------------------------
 
@@ -31,10 +32,14 @@ RUN \
   mkdir -p /var/spool/carbon-relay-ng && \
   chown nobody: /var/spool/carbon-relay-ng && \
   apk del --purge \
+    bash \
     build-base \
+    curl \
+    nano \
     go \
     git \
-    mercurial && \
+    mercurial \
+    tree && \
   rm -rf \
     ${GOPATH} \
     /tmp/* \
@@ -44,10 +49,6 @@ RUN \
 
 COPY rootfs/ /
 
-#WORKDIR /usr/share/grafana
-
 CMD [ "/opt/startup.sh" ]
-
-# CMD [ '/bin/sh' ]
 
 # EOF

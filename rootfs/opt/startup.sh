@@ -32,13 +32,15 @@ run() {
 
   createConfig
 
-  echo -e "\n"
-  echo " ==================================================================="
-  echo " starting carbon-c-relay"
-  echo " ==================================================================="
-  echo ""
+  /usr/bin/carbon-relay-ng ${cfgFile}
 
-  startSupervisor
+#  echo -e "\n"
+#  echo " ==================================================================="
+#  echo " starting carbon-c-relay"
+#  echo " ==================================================================="
+#  echo ""
+#
+#  startSupervisor
 }
 
 run
