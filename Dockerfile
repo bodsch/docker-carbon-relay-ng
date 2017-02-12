@@ -26,7 +26,7 @@ RUN \
     go \
     git \
     mercurial && \
-  mkdir -p /opt/go && \
+  mkdir -p ${GOPATH} && \
   export PATH="${PATH}:${GOPATH}/bin" && \
   go get -d github.com/graphite-ng/carbon-relay-ng || true && \
   go get github.com/jteeuwen/go-bindata/... && \
@@ -36,14 +36,10 @@ RUN \
   mkdir -p /var/spool/carbon-relay-ng && \
   chown nobody: /var/spool/carbon-relay-ng && \
   apk del --purge \
-    bash \
     build-base \
-    curl \
-    nano \
     go \
     git \
-    mercurial \
-    tree && \
+    mercurial && \
   rm -rf \
     ${GOPATH} \
     /tmp/* \
