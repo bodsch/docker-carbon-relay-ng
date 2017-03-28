@@ -1,9 +1,9 @@
 
-FROM alpine:latest
+FROM golang:1.8-alpine
 
 MAINTAINER Bodo Schulz <bodo@boone-schulz.de>
 
-LABEL version="1702-02"
+LABEL version="1703-04"
 
 ENV \
   ALPINE_MIRROR="dl-cdn.alpinelinux.org" \
@@ -17,13 +17,10 @@ EXPOSE 2003 2004 8081
 # ---------------------------------------------------------------------------------------
 
 RUN \
-  echo "http://${ALPINE_MIRROR}/alpine/${ALPINE_VERSION}/main"       > /etc/apk/repositories && \
-  echo "http://${ALPINE_MIRROR}/alpine/${ALPINE_VERSION}/community" >> /etc/apk/repositories && \
   apk --quiet --no-cache update && \
   apk --quiet --no-cache upgrade && \
   apk --quiet --no-cache add \
     build-base \
-    go \
     git \
     mercurial && \
   mkdir -p ${GOPATH} && \
@@ -35,14 +32,17 @@ RUN \
   mv carbon-relay-ng /usr/bin && \
   mkdir -p /var/spool/carbon-relay-ng && \
   chown nobody: /var/spool/carbon-relay-ng && \
-  apk del --purge \
+  apk --quiet --purge del \
     build-base \
     go \
     git \
     mercurial && \
   rm -rf \
     ${GOPATH} \
+    /go \
     /tmp/* \
+    /usr/local/go \
+    /usr/local/bin/go-wrapper \
     /var/cache/apk/*
 
 COPY rootfs/ /
