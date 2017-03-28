@@ -1,5 +1,5 @@
 
-FROM golang:1.8-alpine
+FROM alpine:latest
 
 MAINTAINER Bodo Schulz <bodo@boone-schulz.de>
 
@@ -17,10 +17,13 @@ EXPOSE 2003 2004 8081
 # ---------------------------------------------------------------------------------------
 
 RUN \
+  echo "http://${ALPINE_MIRROR}/alpine/${ALPINE_VERSION}/main"       > /etc/apk/repositories && \
+  echo "http://${ALPINE_MIRROR}/alpine/${ALPINE_VERSION}/community" >> /etc/apk/repositories && \
   apk --quiet --no-cache update && \
   apk --quiet --no-cache upgrade && \
   apk --quiet --no-cache add \
     build-base \
+    go \
     git \
     mercurial && \
   mkdir -p ${GOPATH} && \
@@ -39,10 +42,7 @@ RUN \
     mercurial && \
   rm -rf \
     ${GOPATH} \
-    /go \
     /tmp/* \
-    /usr/local/go \
-    /usr/local/bin/go-wrapper \
     /var/cache/apk/*
 
 COPY rootfs/ /
