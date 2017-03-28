@@ -4,30 +4,26 @@ A Docker container for the fast carbon relay+aggregator with admin interfaces fo
 
 # Status
 
-[![Build Status](https://travis-ci.org/bodsch/docker-carbon-relay-ng.svg?branch=master)](https://travis-ci.org/bodsch/docker-carbon-relay-g)
+[![Build Status](https://travis-ci.org/bodsch/docker-carbon-relay-ng.svg?branch=1703-04)](https://travis-ci.org/bodsch/docker-carbon-relay-g)
 
 
 # Build
 
 Your can use the included Makefile.
 
-To build the Container:
-    make build
+To build the Container: `make build`
 
-Starts the Container:
-    make run
+To remove the builded Docker Image: `make clean`
 
-Starts the Container with Login Shell:
-    make shell
+Starts the Container: `make run`
 
-Entering the Container:
-    make exec
+Starts the Container with Login Shell: `make shell`
 
-Stop (but **not kill**):
-    make stop
+Entering the Container: `make exec`
 
-History
-    make history
+Stop (but **not kill**): `make stop`
+
+History `make history`
 
 
 # Docker Hub
@@ -41,8 +37,8 @@ You can find the Container also at  [DockerHub](https://hub.docker.com/r/bodsch/
 
 # supported Environment Vars
 
-  - GRAPHITE_HOST  (default: ```graphite```)
-  - GRAPHITE_PORT  (default: ```2003```)
+  - GRAPHITE_HOST  (default: `graphite`)
+  - GRAPHITE_PORT  (default: `2003`)
 
 
 # Ports
