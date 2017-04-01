@@ -1,9 +1,9 @@
 
-FROM alpine:latest
+FROM bodsch/docker-golang:1.8
 
 MAINTAINER Bodo Schulz <bodo@boone-schulz.de>
 
-LABEL version="1703-04"
+LABEL version="1704-01"
 
 ENV \
   ALPINE_MIRROR="dl-cdn.alpinelinux.org" \
@@ -23,7 +23,6 @@ RUN \
   apk --quiet --no-cache upgrade && \
   apk --quiet --no-cache add \
     build-base \
-    go \
     git \
     mercurial && \
   mkdir -p ${GOPATH} && \
@@ -37,11 +36,13 @@ RUN \
   chown nobody: /var/spool/carbon-relay-ng && \
   apk --quiet --purge del \
     build-base \
-    go \
     git \
     mercurial && \
   rm -rf \
     ${GOPATH} \
+    /usr/lib/go \
+    /usr/bin/go \
+    /usr/bin/gofmt \
     /tmp/* \
     /var/cache/apk/*
 
