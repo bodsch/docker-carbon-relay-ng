@@ -4,7 +4,13 @@ A Docker container for the fast carbon relay+aggregator with admin interfaces fo
 
 # Status
 
-[![Build Status](https://travis-ci.org/bodsch/docker-carbon-relay-ng.svg?branch=1704-01)](https://travis-ci.org/bodsch/docker-carbon-relay-g)
+[![Docker Pulls](https://img.shields.io/docker/pulls/bodsch/docker-carbon-relay-ng.svg?branch=1705-01)][hub]
+[![Image Size](https://images.microbadger.com/badges/image/bodsch/docker-carbon-relay-ng.svg?branch=1705-01)][microbadger]
+[![Build Status](https://travis-ci.org/bodsch/docker-carbon-relay-ng.svg?branch=1705-01)][travis]
+
+[hub]: https://hub.docker.com/r/bodsch/docker-carbon-relay-ng/
+[microbadger]: https://microbadger.com/images/bodsch/docker-carbon-relay-ng
+[travis]: https://travis-ci.org/bodsch/docker-carbon-relay-ng
 
 
 # Build
