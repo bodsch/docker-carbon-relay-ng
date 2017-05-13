@@ -3,17 +3,15 @@ FROM bodsch/docker-golang:1.8
 
 MAINTAINER Bodo Schulz <bodo@boone-schulz.de>
 
-LABEL version="1705-01"
+LABEL version="1705-03"
 
 ENV \
   ALPINE_MIRROR="dl-cdn.alpinelinux.org" \
   ALPINE_VERSION="edge" \
   TERM=xterm \
-  BUILD_DATE="2017-05-01" \
+  BUILD_DATE="2017-05-13" \
   GOPATH=/opt/go \
-  GO15VENDOREXPERIMENT=0 \
-  APK_ADD="build-base git mercurial" \
-  APK_DEL="build-base git mercurial"
+  APK_ADD="build-base git mercurial"
 
 EXPOSE 2003 2004 8081
 
