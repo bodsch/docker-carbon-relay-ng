@@ -1,35 +1,35 @@
 
-FROM bodsch/docker-golang:1.8
+FROM alpine:3.6
 
 MAINTAINER Bodo Schulz <bodo@boone-schulz.de>
 
-LABEL version="1705-01"
-
 ENV \
-  ALPINE_MIRROR="dl-cdn.alpinelinux.org" \
-  ALPINE_VERSION="edge" \
+  ALPINE_MIRROR="mirror1.hs-esslingen.de/pub/Mirrors" \
+  ALPINE_VERSION="v3.6" \
   TERM=xterm \
-  BUILD_DATE="2017-05-01" \
+  BUILD_DATE="2017-05-29" \
   GOPATH=/opt/go \
-  GO15VENDOREXPERIMENT=0 \
-  APK_ADD="build-base git mercurial" \
-  APK_DEL="build-base git mercurial"
+  APK_ADD="build-base git go mercurial"
 
 EXPOSE 2003 2004 8081
 
-LABEL org.label-schema.build-date=${BUILD_DATE} \
-      org.label-schema.name="carbon-relay-ng Docker Image" \
-      org.label-schema.description="Inofficial carbon-relay-ng Docker Image" \
-      org.label-schema.url="https://github.com/graphite-ng/carbon-relay-ng" \
-      org.label-schema.vcs-url="https://github.com/bodsch/docker-docker-carbon-relay-ng" \
-      org.label-schema.vendor="Bodo Schulz" \
-      org.label-schema.schema-version="1.0" \
-      com.microscaling.docker.dockerfile="/Dockerfile" \
-      com.microscaling.license="GNU General Public License v3.0"
+LABEL \
+  version="1705-01" \
+  org.label-schema.build-date=${BUILD_DATE} \
+  org.label-schema.name="carbon-relay-ng Docker Image" \
+  org.label-schema.description="Inofficial carbon-relay-ng Docker Image" \
+  org.label-schema.url="https://github.com/graphite-ng/carbon-relay-ng" \
+  org.label-schema.vcs-url="https://github.com/bodsch/docker-docker-carbon-relay-ng" \
+  org.label-schema.vendor="Bodo Schulz" \
+  org.label-schema.schema-version="1.0" \
+  com.microscaling.docker.dockerfile="/Dockerfile" \
+  com.microscaling.license="unlicense"
 
 # ---------------------------------------------------------------------------------------
 
 RUN \
+  echo "http://${ALPINE_MIRROR}/alpine/${ALPINE_VERSION}/main"       > /etc/apk/repositories && \
+  echo "http://${ALPINE_MIRROR}/alpine/${ALPINE_VERSION}/community" >> /etc/apk/repositories && \
   apk --quiet --no-cache update && \
   apk --quiet --no-cache upgrade && \
   for apk in ${APK_ADD} ; \
