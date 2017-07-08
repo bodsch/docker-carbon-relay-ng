@@ -7,15 +7,15 @@ ENV \
   ALPINE_MIRROR="mirror1.hs-esslingen.de/pub/Mirrors" \
   ALPINE_VERSION="v3.6" \
   TERM=xterm \
-  BUILD_DATE="2017-06-20" \
-  VERSION="0.8.8" \
+  BUILD_DATE="2017-07-08" \
+  VERSION="0.9.0" \
   GOPATH=/opt/go \
-  APK_ADD="build-base git go mercurial"
+  APK_ADD="g++ git go make musl-dev"
 
 EXPOSE 2003 2004 8081
 
 LABEL \
-  version="1706-03" \
+  version="1707-27.1" \
   org.label-schema.build-date=${BUILD_DATE} \
   org.label-schema.name="carbon-relay-ng Docker Image" \
   org.label-schema.description="Inofficial carbon-relay-ng Docker Image" \
@@ -25,19 +25,18 @@ LABEL \
   org.label-schema.version=${VERSION} \
   org.label-schema.schema-version="1.0" \
   com.microscaling.docker.dockerfile="/Dockerfile" \
-  com.microscaling.license="unlicense"
+  com.microscaling.license="The Unlicense"
 
 # ---------------------------------------------------------------------------------------
+
+WORKDIR /
 
 RUN \
   echo "http://${ALPINE_MIRROR}/alpine/${ALPINE_VERSION}/main"       > /etc/apk/repositories && \
   echo "http://${ALPINE_MIRROR}/alpine/${ALPINE_VERSION}/community" >> /etc/apk/repositories && \
-  apk --quiet --no-cache update && \
-  apk --quiet --no-cache upgrade && \
-  for apk in ${APK_ADD} ; \
-  do \
-    apk --quiet --no-cache add --virtual build-deps ${apk} ; \
-  done && \
+  apk --no-cache update && \
+  apk --no-cache upgrade && \
+  apk --no-cache add ${APK_ADD} && \
   mkdir -p ${GOPATH} && \
   export PATH="${PATH}:${GOPATH}/bin" && \
   go get github.com/graphite-ng/carbon-relay-ng || true && \
@@ -49,8 +48,7 @@ RUN \
   mv carbon-relay-ng /usr/bin && \
   mkdir -p /var/spool/carbon-relay-ng && \
   chown nobody: /var/spool/carbon-relay-ng && \
-  apk --quiet --purge del \
-    build-deps && \
+  apk --purge del ${APK_ADD} && \
   rm -rf \
     ${GOPATH} \
     /usr/lib/go \
