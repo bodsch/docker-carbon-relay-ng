@@ -7,15 +7,15 @@ ENV \
   ALPINE_MIRROR="mirror1.hs-esslingen.de/pub/Mirrors" \
   ALPINE_VERSION="v3.6" \
   TERM=xterm \
-  BUILD_DATE="2017-07-08" \
-  VERSION="0.9.0" \
+  BUILD_DATE="2017-08-29" \
+  VERSION="0.9.1" \
   GOPATH=/opt/go \
   APK_ADD="g++ git go make musl-dev"
 
 EXPOSE 2003 2004 8081
 
 LABEL \
-  version="1707-27.1" \
+  version="1708-35" \
   org.label-schema.build-date=${BUILD_DATE} \
   org.label-schema.name="carbon-relay-ng Docker Image" \
   org.label-schema.description="Inofficial carbon-relay-ng Docker Image" \
