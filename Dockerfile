@@ -1,22 +1,18 @@
 
-FROM alpine:3.6
-
-MAINTAINER Bodo Schulz <bodo@boone-schulz.de>
+FROM alpine:3.7
 
 ENV \
-  ALPINE_MIRROR="mirror1.hs-esslingen.de/pub/Mirrors" \
-  ALPINE_VERSION="v3.6" \
   TERM=xterm \
-  BUILD_DATE="2017-10-15" \
+  TZ='Europe/Berlin' \
+  BUILD_DATE="2018-01-18" \
   BUILD_TYPE="stable" \
-  VERSION="0.9.2" \
-  GOPATH=/opt/go \
-  APK_ADD="g++ git go make musl-dev"
+  VERSION="0.9.4"
 
 EXPOSE 2003 2004 8081
 
 LABEL \
-  version="1710" \
+  version="1801" \
+  maintainer="Bodo Schulz <bodo@boone-schulz.de>" \
   org.label-schema.build-date=${BUILD_DATE} \
   org.label-schema.name="carbon-relay-ng Docker Image" \
   org.label-schema.description="Inofficial carbon-relay-ng Docker Image" \
@@ -33,23 +29,24 @@ LABEL \
 WORKDIR /
 
 RUN \
-  echo "http://${ALPINE_MIRROR}/alpine/${ALPINE_VERSION}/main"       > /etc/apk/repositories && \
-  echo "http://${ALPINE_MIRROR}/alpine/${ALPINE_VERSION}/community" >> /etc/apk/repositories && \
-  apk --no-cache update && \
-  apk --no-cache upgrade && \
-  apk --no-cache add ${APK_ADD} && \
+  apk update --quiet --no-cache  && \
+  apk upgrade --quiet --no-cache && \
+  apk add --quiet --no-cache --virtual .build-deps \
+    g++ git go make musl-dev && \
+  apk add --quiet --no-cache \
+    tzdata && \
+  cp /usr/share/zoneinfo/${TZ} /etc/localtime && \
+  echo ${TZ} > /etc/timezone && \
+  export GOPATH=/opt/go && \
   mkdir -p ${GOPATH} && \
   export PATH="${PATH}:${GOPATH}/bin" && \
   go get github.com/graphite-ng/carbon-relay-ng || true && \
   go get github.com/jteeuwen/go-bindata/... && \
   cd ${GOPATH}/src/github.com/graphite-ng/carbon-relay-ng && \
-  #
-  # build stable packages
   if [ "${BUILD_TYPE}" == "stable" ] ; then \
     echo "switch to stable Tag v${VERSION}" && \
     git checkout tags/v${VERSION} 2> /dev/null ; \
   fi && \
-  #
   version=$(git describe --tags --always | sed 's/^v//') && \
   echo "build version: ${version}" && \
   make && \
@@ -66,6 +63,13 @@ RUN \
     /var/cache/apk/*
 
 COPY rootfs/ /
+
+HEALTHCHECK \
+  --interval=5s \
+  --timeout=2s \
+  --retries=12 \
+  --start-period=10s \
+  CMD ps ax | grep -v grep | grep -c "/usr/bin/carbon-relay-ng" || exit 1
 
 CMD [ "/init/run.sh" ]
 

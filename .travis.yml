@@ -7,8 +7,15 @@ services:
 
 install:
   - travis_retry docker build --tag bodsch/docker-carbon-c-relay .
-  - docker run --detach --name grafana bodsch/docker-carbon-c-relay
+  - docker run --detach --name carbon-c-relay bodsch/docker-carbon-c-relay
 
 script:
   - docker ps | grep -q carbon-c-relay
 
+after_success:
+  - |
+    [ "${TRAVIS_BRANCH}" == "master" ] && curl \
+      --request POST \
+      --header "Content-Type: application/json"  \
+      --data '{"source_type":"Branch","source_name":"master"}' \
+      https://registry.hub.docker.com/u/bodsch/docker-carbon-c-relay/trigger/${DOCKER_HUB_TOKEN}/
