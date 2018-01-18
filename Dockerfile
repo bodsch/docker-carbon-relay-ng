@@ -53,7 +53,7 @@ RUN \
   mv carbon-relay-ng /usr/bin && \
   mkdir -p /var/spool/carbon-relay-ng && \
   chown nobody: /var/spool/carbon-relay-ng && \
-  apk --purge del ${APK_ADD} && \
+  apk --quiet --purge del .build-deps && \
   rm -rf \
     ${GOPATH} \
     /usr/lib/go \
