@@ -7,15 +7,16 @@ ENV \
   ALPINE_MIRROR="mirror1.hs-esslingen.de/pub/Mirrors" \
   ALPINE_VERSION="v3.6" \
   TERM=xterm \
-  BUILD_DATE="2017-08-29" \
-  VERSION="0.9.1" \
+  BUILD_DATE="2017-10-15" \
+  BUILD_TYPE="stable" \
+  VERSION="0.9.2" \
   GOPATH=/opt/go \
   APK_ADD="g++ git go make musl-dev"
 
 EXPOSE 2003 2004 8081
 
 LABEL \
-  version="1708-35" \
+  version="1710" \
   org.label-schema.build-date=${BUILD_DATE} \
   org.label-schema.name="carbon-relay-ng Docker Image" \
   org.label-schema.description="Inofficial carbon-relay-ng Docker Image" \
@@ -42,6 +43,13 @@ RUN \
   go get github.com/graphite-ng/carbon-relay-ng || true && \
   go get github.com/jteeuwen/go-bindata/... && \
   cd ${GOPATH}/src/github.com/graphite-ng/carbon-relay-ng && \
+  #
+  # build stable packages
+  if [ "${BUILD_TYPE}" == "stable" ] ; then \
+    echo "switch to stable Tag v${VERSION}" && \
+    git checkout tags/v${VERSION} 2> /dev/null ; \
+  fi && \
+  #
   version=$(git describe --tags --always | sed 's/^v//') && \
   echo "build version: ${version}" && \
   make && \
