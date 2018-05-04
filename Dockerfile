@@ -3,9 +3,9 @@ FROM golang:1.10-alpine as builder
 
 ENV \
   TERM=xterm \
-  BUILD_DATE="2018-04-10" \
+  BUILD_DATE="2018-05-04" \
   BUILD_TYPE="stable" \
-  VERSION="0.10.0"
+  VERSION="0.10.1"
 
 # ---------------------------------------------------------------------------------------
 
@@ -41,9 +41,6 @@ RUN \
   mv carbon-relay-ng /tmp/carbon-relay-ng && \
   cp -rv examples /tmp/
 
-
-CMD ["bin/sh"]
-
 # ---------------------------------------------------------------------------------------
 
 
@@ -52,12 +49,12 @@ FROM alpine:3.7
 ENV \
   TERM=xterm \
   TZ='Europe/Berlin' \
-  BUILD_DATE="2018-04-10"
+  BUILD_DATE="2018-05-04"
 
 EXPOSE 2003 2004 8081
 
 LABEL \
-  version="1804" \
+  version="1805" \
   maintainer="Bodo Schulz <bodo@boone-schulz.de>" \
   org.label-schema.build-date=${BUILD_DATE} \
   org.label-schema.name="carbon-relay-ng Docker Image" \
