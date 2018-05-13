@@ -1,11 +1,13 @@
 
-FROM golang:1.10-alpine as builder
+FROM golang:1-alpine as builder
+
+ARG BUILD_DATE
+ARG BUILD_VERSION
+ARG BUILD_TYPE
+ARG VERSION
 
 ENV \
-  TERM=xterm \
-  BUILD_DATE="2018-05-04" \
-  BUILD_TYPE="stable" \
-  VERSION="0.10.1"
+  TERM=xterm
 
 # ---------------------------------------------------------------------------------------
 
