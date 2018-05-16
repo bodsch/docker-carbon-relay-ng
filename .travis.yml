@@ -18,22 +18,6 @@ jobs:
         - docker ps | grep -q carbon-relay-ng
         - make stop
         - docker login -u="${DOCKER_USERNAME}" -p="${DOCKER_PASSWORD}"
-        - docker push ${DOCKER_USERNAME}/docker-carbon-relay-ng:${ICINGAWEB_VERSION}
-        - docker tag ${DOCKER_USERNAME}/docker-carbon-relay-ng:${ICINGAWEB_VERSION} ${DOCKER_USERNAME}/docker-carbon-relay-ng:latest
+        - docker push ${DOCKER_USERNAME}/docker-carbon-relay-ng:${VERSION}
+        - docker tag ${DOCKER_USERNAME}/docker-carbon-relay-ng:${VERSION} ${DOCKER_USERNAME}/docker-carbon-relay-ng:latest
         - docker push ${DOCKER_USERNAME}/docker-carbon-relay-ng:latest
-
-#install:
-#  - travis_retry docker build --tag bodsch/docker-carbon-relay-ng .
-#  - docker run --detach --name carbon-relay-ng bodsch/docker-carbon-relay-ng
-#
-#script:
-#  - docker ps | grep -q carbon-relay-ng
-#
-#after_success:
-#  - |
-#    [ "${TRAVIS_BRANCH}" == "master" ] && curl \
-#      --request POST \
-#      --header "Content-Type: application/json"  \
-#      --data '{"source_type":"Branch","source_name":"master"}' \
-#      https://registry.hub.docker.com/u/bodsch/docker-carbon-relay-ng/trigger/${DOCKER_HUB_TOKEN}/
-#
