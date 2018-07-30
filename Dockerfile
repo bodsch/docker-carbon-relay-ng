@@ -16,9 +16,9 @@ RUN \
   apk upgrade --no-cache && \
   apk add \
     g++ git make musl-dev && \
-  echo "export BUILD_DATE=${BUILD_DATE}" >> /etc/enviroment && \
-  echo "export BUILD_TYPE=${BUILD_TYPE}" >> /etc/enviroment && \
-  echo "export VERSION=${VERSION}" >> /etc/enviroment
+  echo "export BUILD_DATE=${BUILD_DATE}" >> /etc/environment && \
+  echo "export BUILD_TYPE=${BUILD_TYPE}" >> /etc/environment && \
+  echo "export VERSION=${VERSION}" >> /etc/environment
 
 RUN \
   export GOPATH=/opt/go && \
