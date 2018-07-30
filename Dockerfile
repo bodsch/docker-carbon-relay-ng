@@ -46,17 +46,17 @@ RUN \
 # ---------------------------------------------------------------------------------------
 
 
-FROM alpine:3.7
+FROM alpine:3.8
 
 ENV \
   TERM=xterm \
   TZ='Europe/Berlin' \
-  BUILD_DATE="2018-05-04"
+  BUILD_DATE="2018-07-30"
 
 EXPOSE 2003 2004 8081
 
 LABEL \
-  version="1805" \
+  version="1807" \
   maintainer="Bodo Schulz <bodo@boone-schulz.de>" \
   org.label-schema.build-date=${BUILD_DATE} \
   org.label-schema.name="carbon-relay-ng Docker Image" \
