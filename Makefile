@@ -7,10 +7,10 @@ REPO     = docker-carbon-relay-ng
 NAME     = carbon-relay-ng
 INSTANCE = default
 
-BUILD_DATE := $(shell date +%Y-%m-%d)
+BUILD_DATE    := $(shell date +%Y-%m-%d)
 BUILD_VERSION := $(shell date +%y%m)
-BUILD_TYPE ?= 'stable'
-VERSION ?= 0.10.1
+BUILD_TYPE    ?= 'stable'
+VERSION       ?= 0.10.1
 
 .PHONY: build push shell run start stop rm release
 

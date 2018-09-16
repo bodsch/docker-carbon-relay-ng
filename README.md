@@ -1,6 +1,7 @@
 # docker-carbon-relay-ng
 
-A Docker container for the fast carbon relay+aggregator with admin interfaces for making changes online (https://github.com/graphite-ng/carbon-relay-ng)
+A Docker container for the fast carbon relay+aggregator with admin interfaces for making changes online
+(https://github.com/graphite-ng/carbon-relay-ng)
 
 # Status
 
@@ -43,13 +44,15 @@ You can find the Container also at  [DockerHub](https://hub.docker.com/r/bodsch/
 
 # supported Environment Vars
 
-  - GRAPHITE_HOST  (default: `graphite`)
-  - GRAPHITE_PORT  (default: `2003`)
+- `GRAPHITE_HOST`  (default: `graphite`)
+- `GRAPHITE_PORT`  (default: `2003`)
+- `GRAPHITE_PICKLE` (default: `false`)
+- `GRAPHITE_SPOOLING` (default: `false`)
 
 
 # Ports
 
- - 2003
- - 2004
- - 8081
+- 2003
+- 2004
+- 8081
 

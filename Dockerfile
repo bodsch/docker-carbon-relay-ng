@@ -7,21 +7,21 @@ ARG BUILD_TYPE
 ARG VERSION
 
 ENV \
-  TERM=xterm
+  TERM=xterm \
+  GOPATH=/opt/go
 
 # ---------------------------------------------------------------------------------------
 
 RUN \
-  apk update --no-cache && \
-  apk upgrade --no-cache && \
-  apk add \
+  apk update  --quiet --no-cache && \
+  apk upgrade --quiet --no-cache && \
+  apk add     --quiet \
     g++ git make musl-dev && \
-  echo "export BUILD_DATE=${BUILD_DATE}" >> /etc/environment && \
-  echo "export BUILD_TYPE=${BUILD_TYPE}" >> /etc/environment && \
-  echo "export VERSION=${VERSION}" >> /etc/environment
+  echo "export BUILD_DATE=${BUILD_DATE}"  > /etc/profile.d/carbon-relay-ng.sh && \
+  echo "export BUILD_TYPE=${BUILD_TYPE}" >> /etc/profile.d/carbon-relay-ng.sh && \
+  echo "export VERSION=${VERSION}"       >> /etc/profile.d/carbon-relay-ng.sh
 
 RUN \
-  export GOPATH=/opt/go && \
   mkdir -p ${GOPATH} && \
   export PATH="${PATH}:${GOPATH}/bin" && \
   go get -d github.com/graphite-ng/carbon-relay-ng || true && \
@@ -34,7 +34,6 @@ RUN \
 
 RUN \
   echo "build" && \
-  export GOPATH=/opt/go && \
   cd ${GOPATH}/src/github.com/graphite-ng/carbon-relay-ng && \
   export PATH="${PATH}:${GOPATH}/bin" && \
   version=$(git describe --tags --always | sed 's/^v//') && \
@@ -45,18 +44,51 @@ RUN \
 
 # ---------------------------------------------------------------------------------------
 
-
 FROM alpine:3.8
 
 ENV \
   TERM=xterm \
-  TZ='Europe/Berlin' \
-  BUILD_DATE="2018-07-30"
+  TZ='Europe/Berlin'
+
+# ---------------------------------------------------------------------------------------
+
+RUN \
+  apk update  --quiet --no-cache && \
+  apk upgrade --quiet --no-cache && \
+  apk add     --quiet --no-cache --virtual .build-deps \
+    tzdata && \
+  cp /usr/share/zoneinfo/${TZ} /etc/localtime && \
+  echo ${TZ} > /etc/timezone && \
+  apk --quiet --purge del .build-deps && \
+  mkdir -p /var/spool/carbon-relay-ng && \
+  chown nobody: /var/spool/carbon-relay-ng && \
+  rm -rf \
+    /tmp/* \
+    /var/cache/apk/*
+
+WORKDIR /etc/carbon-relay-ng/
+
+COPY --from=builder /etc/profile.d/carbon-relay-ng.sh  /etc/profile.d/carbon-relay-ng.sh
+COPY --from=builder /tmp/carbon-relay-ng               /usr/bin/carbon-relay-ng
+COPY --from=builder /tmp/examples/storage-schemas.conf /etc/carbon-relay-ng/storage-schemas.conf-DIST
+COPY --from=builder /tmp/examples/carbon-relay-ng.ini  /etc/carbon-relay-ng/carbon-relay-ng.ini-DIST
+COPY rootfs/ /
+
+HEALTHCHECK \
+  --interval=5s \
+  --timeout=2s \
+  --retries=12 \
+  --start-period=10s \
+  CMD ps ax | grep -v grep | grep -c "/usr/bin/carbon-relay-ng" || exit 1
+
+CMD [ "/init/run.sh" ]
+
+# ---------------------------------------------------------------------------------------
 
 EXPOSE 2003 2004 8081
 
 LABEL \
-  version="1807" \
+  version=${BUILD_VERSION} \
   maintainer="Bodo Schulz <bodo@boone-schulz.de>" \
   org.label-schema.build-date=${BUILD_DATE} \
   org.label-schema.name="carbon-relay-ng Docker Image" \
@@ -68,38 +100,5 @@ LABEL \
   org.label-schema.schema-version="1.0" \
   com.microscaling.docker.dockerfile="/Dockerfile" \
   com.microscaling.license="The Unlicense"
-
-# ---------------------------------------------------------------------------------------
-
-WORKDIR /
-
-COPY --from=builder /tmp/carbon-relay-ng /usr/bin/carbon-relay-ng
-COPY --from=builder /tmp/examples/storage-schemas.conf /etc/carbon-relay-ng/storage-schemas.conf
-COPY --from=builder /tmp/examples/carbon-relay-ng.ini  /etc/carbon-relay-ng/carbon-relay-ng.ini
-
-RUN \
-  apk update --quiet --no-cache  && \
-  apk upgrade --quiet --no-cache && \
-  apk add --no-cache --quiet --virtual .build-deps \
-    tzdata && \
-  cp /usr/share/zoneinfo/${TZ} /etc/localtime && \
-  echo ${TZ} > /etc/timezone && \
-  apk --quiet --purge del .build-deps && \
-  mkdir -p /var/spool/carbon-relay-ng && \
-  chown nobody: /var/spool/carbon-relay-ng && \
-  rm -rf \
-    /tmp/* \
-    /var/cache/apk/*
-
-COPY rootfs/ /
-
-HEALTHCHECK \
-  --interval=5s \
-  --timeout=2s \
-  --retries=12 \
-  --start-period=10s \
-  CMD ps ax | grep -v grep | grep -c "/usr/bin/carbon-relay-ng" || exit 1
-
-CMD [ "/init/run.sh" ]
 
 # EOF
