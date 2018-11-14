@@ -8,7 +8,8 @@ ARG VERSION
 
 ENV \
   TERM=xterm \
-  GOPATH=/opt/go
+  GOPATH=/opt/go \
+  PATH="${PATH}:${GOPATH}/bin"
 
 # ---------------------------------------------------------------------------------------
 
@@ -21,20 +22,21 @@ RUN \
   echo "export BUILD_TYPE=${BUILD_TYPE}" >> /etc/profile.d/carbon-relay-ng.sh && \
   echo "export VERSION=${VERSION}"       >> /etc/profile.d/carbon-relay-ng.sh
 
+WORKDIR ${GOPATH}
+
 RUN \
-  mkdir -p ${GOPATH} && \
-  export PATH="${PATH}:${GOPATH}/bin" && \
-  go get -d github.com/graphite-ng/carbon-relay-ng || true && \
-  go get github.com/jteeuwen/go-bindata/... && \
-  cd ${GOPATH}/src/github.com/graphite-ng/carbon-relay-ng && \
+  go get github.com/graphite-ng/carbon-relay-ng || true && \
+  go get github.com/shuLhan/go-bindata/cmd/go-bindata
+
+WORKDIR "${GOPATH}/src/github.com/graphite-ng/carbon-relay-ng"
+
+RUN \
   if [ "${BUILD_TYPE}" == "stable" ] ; then \
     echo "switch to stable Tag v${VERSION}" && \
-    git checkout tags/${VERSION} 2> /dev/null ; \
+    git checkout tags/v${VERSION} 2> /dev/null ; \
   fi
 
 RUN \
-  echo "build" && \
-  cd ${GOPATH}/src/github.com/graphite-ng/carbon-relay-ng && \
   export PATH="${PATH}:${GOPATH}/bin" && \
   version=$(git describe --tags --always | sed 's/^v//') && \
   echo "build version: ${version}" && \
@@ -102,3 +104,4 @@ LABEL \
   com.microscaling.license="The Unlicense"
 
 # EOF
+
