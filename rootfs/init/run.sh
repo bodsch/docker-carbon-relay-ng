@@ -4,6 +4,7 @@ GRAPHITE_HOST=${GRAPHITE_HOST:-graphite}
 GRAPHITE_PORT=${GRAPHITE_PORT:-2003}
 GRAPHITE_SPOOLING=${GRAPHITE_SPOOLING:-"false"}
 GRAPHITE_PICKLE=${GRAPHITE_PICKLE:-"false"}
+METRIC_PREPEND=${METRIC_PREPEND:-""}
 
 if [[ "${GRAPHITE_SPOOLING}" != "false" ]] || [[ "${GRAPHITE_SPOOLING}" != "true" ]]
 then
@@ -29,6 +30,7 @@ sed -i \
   -e "s/%GRAPHITE_PORT%/${GRAPHITE_PORT}/" \
   -e "s/%GRAPHITE_SPOOLING%/${GRAPHITE_SPOOLING}/" \
   -e "s/%GRAPHITE_PICKLE%/${GRAPHITE_PICKLE}/" \
+  -e "s/%METRIC_PREPEND%/${METRIC_PREPEND}/" \
   ${config_file}
 
 /usr/bin/carbon-relay-ng ${config_file}
