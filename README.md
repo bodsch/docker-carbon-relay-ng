@@ -48,6 +48,7 @@ You can find the Container also at  [DockerHub](https://hub.docker.com/r/bodsch/
 - `GRAPHITE_PORT`  (default: `2003`)
 - `GRAPHITE_PICKLE` (default: `false`)
 - `GRAPHITE_SPOOLING` (default: `false`)
+- `METRIC_PREPEND` (default: empty)
 
 
 # Ports
