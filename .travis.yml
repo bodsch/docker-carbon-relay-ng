@@ -18,6 +18,7 @@ jobs:
         - docker ps | grep -q carbon-relay-ng
         - make stop
         - docker login -u="${DOCKER_USERNAME}" -p="${DOCKER_PASSWORD}"
+        - docker tag travis/carbon-relay-ng:latest ${DOCKER_USERNAME}/docker-carbon-relay-ng:${VERSION}
         - docker push ${DOCKER_USERNAME}/docker-carbon-relay-ng:${VERSION}
         - docker tag ${DOCKER_USERNAME}/docker-carbon-relay-ng:${VERSION} ${DOCKER_USERNAME}/docker-carbon-relay-ng:latest
         - docker push ${DOCKER_USERNAME}/docker-carbon-relay-ng:latest
