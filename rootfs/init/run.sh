@@ -1,10 +1,13 @@
 #!/bin/sh
 
+set -x
+
 GRAPHITE_HOST=${GRAPHITE_HOST:-graphite}
 GRAPHITE_PORT=${GRAPHITE_PORT:-2003}
 GRAPHITE_SPOOLING=${GRAPHITE_SPOOLING:-"false"}
 GRAPHITE_PICKLE=${GRAPHITE_PICKLE:-"false"}
 METRIC_PREPEND=${METRIC_PREPEND:-""}
+HOSTNAME=${HOSTNAME:-$(hostname -s)}
 
 if [[ "${GRAPHITE_SPOOLING}" != "false" ]] || [[ "${GRAPHITE_SPOOLING}" != "true" ]]
 then
@@ -21,6 +24,11 @@ then
   cp -a /etc/carbon-relay-ng/storage-schemas.conf-DIST /etc/carbon-relay-ng/storage-schemas.conf
 fi
 
+if [[ "${GRAPHITE_SPOOLING}" = "true" ]]
+then
+  mkdir /var/spool/${HOSTNAME}
+  chown -R nobody:nobody /var/spool/${HOSTNAME}
+fi
 
 config_file="/etc/carbon-relay-ng.ini"
 

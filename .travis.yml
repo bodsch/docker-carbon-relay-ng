@@ -13,7 +13,7 @@ jobs:
   include:
     - stage: build, test and push docker image
       script:
-        - make build
+        - make
         - make start
         - docker ps | grep -q carbon-relay-ng
         - make stop

@@ -1,7 +1,0 @@
-PORTS = \
- --publish 8081:8081
-
-# VOLUMES = \
-#  --volume
-# ENV = \
-#   --env

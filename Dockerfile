@@ -14,8 +14,8 @@ ENV \
 # ---------------------------------------------------------------------------------------
 
 RUN \
-  apk update  --quiet --no-cache && \
-  apk upgrade --quiet --no-cache && \
+  apk update  --quiet && \
+  apk upgrade --quiet && \
   apk add     --quiet \
     g++ git make musl-dev && \
   echo "export BUILD_DATE=${BUILD_DATE}"  > /etc/profile.d/carbon-relay-ng.sh && \
@@ -47,6 +47,8 @@ RUN \
 # ---------------------------------------------------------------------------------------
 
 FROM alpine:3.8
+
+ARG VCS_REF
 
 ENV \
   TERM=xterm \
@@ -96,6 +98,7 @@ LABEL \
   org.label-schema.name="carbon-relay-ng Docker Image" \
   org.label-schema.description="Inofficial carbon-relay-ng Docker Image" \
   org.label-schema.url="https://github.com/graphite-ng/carbon-relay-ng" \
+  org.label-schema.vcs-ref=${VCS_REF} \
   org.label-schema.vcs-url="https://github.com/bodsch/docker-docker-carbon-relay-ng" \
   org.label-schema.vendor="Bodo Schulz" \
   org.label-schema.version=${VERSION} \
