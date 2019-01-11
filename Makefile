@@ -8,7 +8,7 @@ export BUILD_TYPE        ?= stable
 export VERSION           ?= 0.11.0
 
 
-.PHONY: build shell run exec start stop clean compose-file github-cache
+.PHONY: build shell run exec start stop clean compose-file
 
 default: build
 
