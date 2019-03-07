@@ -11,14 +11,29 @@ env:
 
 jobs:
   include:
-    - stage: build, test and push docker image
+    - stage: build
       script:
         - make
-        - make start
-        - docker ps | grep -q carbon-relay-ng
-        - make stop
+
+    - stage: test
+      script:
+        - make compose-file
+        - docker-compose build
+        - docker-compose up -d
+        - sleep 30s
+        - make test
+        - docker-compose down
+
+    - stage: push docker image
+      if: branch = master
+      script:
+        - make
+        - docker tag ${USER}/carbon-relay-ng:latest ${DOCKER_USERNAME}/docker-carbon-relay-ng:latest
+        - docker tag ${USER}/carbon-relay-ng:latest ${DOCKER_USERNAME}/docker-carbon-relay-ng:${VERSION}
+        #
         - docker login -u="${DOCKER_USERNAME}" -p="${DOCKER_PASSWORD}"
-        - docker tag travis/carbon-relay-ng:latest ${DOCKER_USERNAME}/docker-carbon-relay-ng:${VERSION}
-        - docker push ${DOCKER_USERNAME}/docker-carbon-relay-ng:${VERSION}
-        - docker tag ${DOCKER_USERNAME}/docker-carbon-relay-ng:${VERSION} ${DOCKER_USERNAME}/docker-carbon-relay-ng:latest
+        #
         - docker push ${DOCKER_USERNAME}/docker-carbon-relay-ng:latest
+        - docker push ${DOCKER_USERNAME}/docker-carbon-relay-ng:${VERSION}
+        #
+        - docker logout
