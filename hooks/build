@@ -11,5 +11,5 @@ docker build \
   --build-arg BUILD_DATE=${BUILD_DATE} \
   --build-arg BUILD_VERSION=${BUILD_VERSION} \
   --build-arg BUILD_TYPE=${BUILD_TYPE} \
-  --build-arg VERSION=${VERSION} \
+  --build-arg VERSION=${CARBON_RELAY_VERSION} \
   --tag ${DOCKER_NAME_SPACE}/${DOCKER_IMAGE_NAME}:${DOCKER_VERSION} .

@@ -5,11 +5,25 @@
 
 [[ -e hooks/environment ]] && . hooks/environment
 
-echo "BUILD_DATE=${BUILD_DATE}" > .env
-echo "BUILD_VERSION=${BUILD_VERSION}" >> .env
-echo "BUILD_TYPE=${BUILD_TYPE}" >> .env
-echo "VERSION=${VERSION}" >> .env
+cat << EOF > .env
+BUILD_DATE=${BUILD_DATE}
+BUILD_VERSION=${BUILD_VERSION}
+BUILD_TYPE=${BUILD_TYPE}
+
+CARBON_RELAY_VERSION=${CARBON_RELAY_VERSION}
+
+GRAPHITE_HOST=graphite
+
+# error warning notice info debug
+LOG_LEVEL=foo
+
+GRAPHITE_SPOOLING=no
+
+EOF
+
 
 docker-compose \
-  --file docker-compose_example.yml \
+  --file compose/head.yml \
+  --file compose/graphite.yml \
+  --file compose/carbon-relay.yml \
   config > docker-compose.yml
