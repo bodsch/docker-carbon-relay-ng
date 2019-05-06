@@ -1,39 +1,31 @@
 sudo: required
-
 group: edge
-
 services:
-  - docker
-
+- docker
 env:
   global:
-    - VERSION=${VERSION:-0.11.0}
-
+  - VERSION=${VERSION:-0.11.0}
+  - secure: i9pR/X43XXeNIyJ1WoI5+ZKXJDkqKGoXTQzih73wGYX6qdieJuor770RY8Y7p+3J6ffViwTTrReMxmifcsP2ahbjj/g607LRSELrSj8xjPQtgWGQ1c/R/IncpwXAE/JGMdwJahW5a9knl7O/4Kovf8mQy8Yi5g3f2mJs5O1ZhYP5XNCthxzIzWMHMTGD5xkk9xd2AScxZDExDiaunEWN3u0kiwW5oRwui6jifxL24CurqsiWn8xtOymNm/oKznBc/Y01LyR5K2LCpDrO8TZDvMD+YGWBeRIqvFmZVly003Dbz5E6jMus0jOgokaZgvMl8KcTJI6JyGQPVgAOfqjCjSYLom9NYMXHuN7JUE0H/rQ3TaFqwZFUlBDhEJgQUep8RLce/2Z690ahTtAvkpp1q26iGhT6TDf/0S+G3vg8nFWAS36nPdn3GMO37yBjuLPojg18bJs6o1s86NSQG8SYFMpo7c0dNX+Os8PgdMSfP7nAjsE2SNLfcD01xeyFSsq7EDb4H6Y5cnju1ViSw0lMjaO+QAfXaTF+JbPMc+H4JoulHoJJAaS8MamZL0igl4pvmU1RWOXO2H+28QiQn077G+glUZw+HQjCm5Av66tgExWcRObAdHzpaU3RF+QbzEZomiaBYV078sfPLF6suY2V2icIJvK06OlzVzRISJMcswU=
 jobs:
   include:
-    - stage: build
-      script:
-        - make
-
-    - stage: test
-      script:
-        - make compose-file
-        - docker-compose build
-        - docker-compose up -d
-        - sleep 30s
-        - make test
-        - docker-compose down
-
-    - stage: push docker image
-      if: branch = master
-      script:
-        - make
-        - docker tag ${USER}/carbon-relay-ng:latest ${DOCKER_USERNAME}/docker-carbon-relay-ng:latest
-        - docker tag ${USER}/carbon-relay-ng:latest ${DOCKER_USERNAME}/docker-carbon-relay-ng:${VERSION}
-        #
-        - docker login -u="${DOCKER_USERNAME}" -p="${DOCKER_PASSWORD}"
-        #
-        - docker push ${DOCKER_USERNAME}/docker-carbon-relay-ng:latest
-        - docker push ${DOCKER_USERNAME}/docker-carbon-relay-ng:${VERSION}
-        #
-        - docker logout
+  - stage: build
+    script:
+    - make
+  - stage: test
+    script:
+    - make compose-file
+    - docker-compose build
+    - docker-compose up -d
+    - sleep 30s
+    - make test
+    - docker-compose down
+  - stage: push docker image
+    if: branch = master
+    script:
+    - make
+    - docker tag ${USER}/carbon-relay-ng:latest ${DOCKER_USERNAME}/docker-carbon-relay-ng:latest
+    - docker tag ${USER}/carbon-relay-ng:latest ${DOCKER_USERNAME}/docker-carbon-relay-ng:${VERSION}
+    - docker login -u="${DOCKER_USERNAME}" -p="${DOCKER_PASSWORD}"
+    - docker push ${DOCKER_USERNAME}/docker-carbon-relay-ng:latest
+    - docker push ${DOCKER_USERNAME}/docker-carbon-relay-ng:${VERSION}
+    - docker logout
