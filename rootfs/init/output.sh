@@ -13,9 +13,9 @@ log_output() {
 
   if [ -z "${level}" ]
   then
-    printf "$(date +"[%Y-%m-%d %H:%M:%S]") %b\n" "${message}"
+    printf "$(date +"[%Y-%m-%d %H:%M:%S]") %b\\n" "${message}"
   else
-    printf "$(date +"[%Y-%m-%d %H:%M:%S]") %b %b\n" "${level}"  "${message}"
+    printf "$(date +"[%Y-%m-%d %H:%M:%S]") %b %b\\n" "${level}"  "${message}"
   fi
 }
 
