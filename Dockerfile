@@ -39,7 +39,7 @@ WORKDIR /opt/go/src/github.com/graphite-ng/carbon-relay-ng
 
 # hadolint ignore=DL4006,SC2153
 RUN \
-  if [ "${BUILD_TYPE}" == "stable" ] ; then \
+  if [ "${BUILD_TYPE}" = "stable" ] ; then \
     echo "switch to stable Tag v${VERSION}" && \
     git checkout "tags/v${VERSION}" 2> /dev/null ; \
   fi && \
@@ -74,6 +74,8 @@ COPY rootfs/ /
 RUN \
   apk update  --quiet --no-cache && \
   apk upgrade --quiet --no-cache && \
+  apk add     --quiet --no-cache \
+    netcat-openbsd && \
   apk add     --quiet --no-cache --virtual .build-deps \
     shadow \
     tzdata && \
@@ -133,4 +135,3 @@ LABEL \
   com.microscaling.license="The Unlicense"
 
 # EOF
-

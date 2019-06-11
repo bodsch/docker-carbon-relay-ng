@@ -30,23 +30,8 @@ wait_for_service() {
   fi
 }
 
+# A simple function to send data to a remote host:port address.
 #
-# Get the current hostname
-#
-host=$(hostname --short)
-
-#
-# The current time - we want all metrics to be reported at the
-# same time.
-#
-time=$(date +%s)
-
-
-###
-##
-## A simple function to send data to a remote host:port address.
-##
-###
 send() {
 
   echo "  - '${1}'"
@@ -71,8 +56,13 @@ send() {
 }
 
 
-
 send_request() {
+
+  host=$(hostname --short)
+
+  _time() {
+    echo $(date +%s)
+  }
 
   echo -e "\nsend some metrics to graphite .."
   ##
@@ -80,7 +70,7 @@ send_request() {
   ##
   if [ -e /proc/stat ]; then
     forked=$(awk '/processes/ {print $2}' /proc/stat)
-    send "$host.process.forked $forked $time"
+    send "${host}.process.forked ${forked} $(_time)"
   fi
 
   ##
@@ -89,7 +79,7 @@ send_request() {
   if ( command -v ps >/dev/null 2>/dev/null )
   then
     pcount=$(ps -Al | wc -l)
-    send "$host.process.count  $pcount $time"
+    send "${host}.process.count  ${pcount} $(_time)"
   fi
 
   echo -e "\ntest webinterface .."

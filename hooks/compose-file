@@ -15,7 +15,7 @@ CARBON_RELAY_VERSION=${CARBON_RELAY_VERSION}
 GRAPHITE_HOST=graphite
 
 # error warning notice info debug
-LOG_LEVEL=foo
+LOG_LEVEL=error
 
 GRAPHITE_SPOOLING=no
 
