@@ -65,17 +65,16 @@ send_request() {
   }
 
   echo -e "\nsend some metrics to graphite .."
-  ##
-  ## Fork-count
-  ##
+
+  # Fork-count
+  #
   if [ -e /proc/stat ]; then
     forked=$(awk '/processes/ {print $2}' /proc/stat)
     send "${host}.process.forked ${forked} $(_time)"
   fi
 
-  ##
-  ## Process-count
-  ##
+  # Process-count
+  #
   if ( command -v ps >/dev/null 2>/dev/null )
   then
     pcount=$(ps -Al | wc -l)

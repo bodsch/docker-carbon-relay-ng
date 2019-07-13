@@ -17,7 +17,7 @@ fi
 hadolint Dockerfile
 
 shellcheck \
-  rootfs/init/*.sh \
   --shell=sh \
   --external-sources \
-  --exclude=SC1091,SC2039
+  --exclude=SC1091,SC2039 \
+  rootfs/init/*.sh \
