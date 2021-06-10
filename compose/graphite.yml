@@ -5,6 +5,6 @@ services:
 
   graphite:
     restart: always
-    image: bodsch/docker-graphite:1.1.5
+    image: bodsch/docker-graphite:1.1.7
     container_name: graphite
     hostname: graphite
