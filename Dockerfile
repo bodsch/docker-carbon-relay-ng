@@ -5,12 +5,11 @@ ARG BUILD_VERSION
 ARG BUILD_TYPE
 ARG VERSION
 
-ENV \
-  TERM=xterm \
-  GOPATH=/opt/go \
-  CGO_ENABLED=0 \
-  GO111MODULE=on \
-  PATH="${PATH}:${GOPATH}/bin"
+ENV TERM=xterm
+ENV GOPATH=/opt/go
+ENV CGO_ENABLED=0
+ENV GO111MODULE=on
+ENV PATH="${PATH}:${GOPATH}/bin"
 
 # ---------------------------------------------------------------------------------------
 
@@ -26,6 +25,7 @@ RUN \
     make \
     musl-dev
 
+# hadolint ignore=DL3059
 RUN \
   echo "export BUILD_DATE=${BUILD_DATE}"  > /etc/profile.d/carbon-relay-ng.sh && \
   echo "export BUILD_TYPE=${BUILD_TYPE}" >> /etc/profile.d/carbon-relay-ng.sh && \
@@ -33,15 +33,16 @@ RUN \
 
 WORKDIR ${GOPATH}
 
+# hadolint ignore=DL3059
 RUN \
   git clone https://github.com/grafana/carbon-relay-ng.git
-
+# hadolint ignore=DL3059
 RUN \
   go get github.com/shuLhan/go-bindata/cmd/go-bindata
 
 WORKDIR ${GOPATH}/carbon-relay-ng
 
-# hadolint ignore=DL4006,SC2153
+# hadolint ignore=DL4006,DL3059,SC2153
 RUN \
   if [ "${BUILD_TYPE}" = "stable" ] ; then \
     echo "switch to stable Tag v${VERSION}" && \
@@ -49,11 +50,11 @@ RUN \
   fi && \
   version=$(git describe --tags --always | sed 's/^v//') && \
   echo "build version: ${version}"
-
+# hadolint ignore=DL3059
 RUN \
   export PATH="${PATH}:${GOPATH}/bin" && \
   make
-
+# hadolint ignore=DL3059
 RUN \
   mv -v carbon-relay-ng /tmp/carbon-relay-ng && \
   mv -v examples /tmp/
@@ -85,7 +86,7 @@ RUN \
   apk update  --quiet --no-cache && \
   apk upgrade --quiet --no-cache && \
   apk add     --quiet --no-cache \
-    netcat-openbsd && \
+    bash netcat-openbsd && \
   apk add     --quiet --no-cache --virtual .build-deps \
     shadow \
     tzdata && \

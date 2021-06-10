@@ -9,12 +9,15 @@ on:
 
 jobs:
   build:
-    name: build graphite ${{ matrix.carbon_relay_version }}
+    name: build carbon-relay-ng ${{ matrix.carbon_relay_version }}
     runs-on: ubuntu-18.04
     strategy:
       fail-fast: false
       matrix:
         carbon_relay_version:
+          - 0.11.0
+          - 0.12.0
+          - 0.13.0
           - 0.14.0
 
     steps:
