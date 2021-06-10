@@ -5,7 +5,7 @@ PORT=2003
 
 wait_for_service() {
 
-  echo -e "\nwait for the carbon-c-relay service"
+  echo -e "\nwait for the carbon-relay-ng service"
 
   RETRY=35
   # wait for the running certificate service

@@ -1,7 +1,7 @@
 # docker-carbon-relay-ng
 
 A Docker container for the fast carbon relay+aggregator with admin interfaces for making changes online
-(https://github.com/graphite-ng/carbon-relay-ng)
+(https://github.com/grafana/carbon-relay-ng)
 
 # Status
 

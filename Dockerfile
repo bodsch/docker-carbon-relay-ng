@@ -8,6 +8,8 @@ ARG VERSION
 ENV \
   TERM=xterm \
   GOPATH=/opt/go \
+  CGO_ENABLED=0 \
+  GO111MODULE=on \
   PATH="${PATH}:${GOPATH}/bin"
 
 # ---------------------------------------------------------------------------------------
@@ -32,10 +34,12 @@ RUN \
 WORKDIR ${GOPATH}
 
 RUN \
-  go get github.com/graphite-ng/carbon-relay-ng || true && \
+  git clone https://github.com/grafana/carbon-relay-ng.git
+
+RUN \
   go get github.com/shuLhan/go-bindata/cmd/go-bindata
 
-WORKDIR /opt/go/src/github.com/graphite-ng/carbon-relay-ng
+WORKDIR ${GOPATH}/carbon-relay-ng
 
 # hadolint ignore=DL4006,SC2153
 RUN \
@@ -48,15 +52,21 @@ RUN \
 
 RUN \
   export PATH="${PATH}:${GOPATH}/bin" && \
-  make && \
-  mv carbon-relay-ng /tmp/carbon-relay-ng && \
-  cp -rv examples /tmp/
+  make
+
+RUN \
+  mv -v carbon-relay-ng /tmp/carbon-relay-ng && \
+  mv -v examples /tmp/
 
 # ---------------------------------------------------------------------------------------
 
-FROM alpine:3.10
+FROM alpine:3
 
 ARG VCS_REF
+ARG BUILD_DATE
+ARG BUILD_VERSION
+ARG BUILD_TYPE
+ARG VERSION
 
 ENV \
   TERM=xterm \
@@ -103,7 +113,7 @@ RUN \
     /var/cache/apk/*
 
 WORKDIR /home/relay
-VOLUME ["/home/relay" "/etc/carbon-relay-ng"]
+# VOLUME ["/home/relay" "/etc/carbon-relay-ng"]
 USER relay
 
 HEALTHCHECK \
@@ -125,7 +135,7 @@ LABEL \
   org.label-schema.build-date=${BUILD_DATE} \
   org.label-schema.name="carbon-relay-ng Docker Image" \
   org.label-schema.description="Inofficial carbon-relay-ng Docker Image" \
-  org.label-schema.url="https://github.com/graphite-ng/carbon-relay-ng" \
+  org.label-schema.url="https://github.com/grafana/carbon-relay-ng" \
   org.label-schema.vcs-ref=${VCS_REF} \
   org.label-schema.vcs-url="https://github.com/bodsch/docker-docker-carbon-relay-ng" \
   org.label-schema.vendor="Bodo Schulz" \
